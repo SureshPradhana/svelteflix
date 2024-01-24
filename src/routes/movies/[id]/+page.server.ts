@@ -1,17 +1,12 @@
-import { supabase } from '$lib/server/supabase.js';
+import {db,users} from '$lib/server/supabase';
 import { error } from '@sveltejs/kit';
 
 export async function load({ locals, params }) {
 	if (locals.user) {
-		const { status, data } = await supabase
-			.from('watchlist')
-			.select('*')
-			.eq('user_id', locals.user.id)
-			.eq('movie_id', params.id)
-			.limit(1);
+		const data=  db.getwatchlist(locals.user);
 
-		if (!status) {
-			throw error(status);
+		if (!data) {
+			throw error(404, `Could not find watchlist`);
 		}
 
 		return {

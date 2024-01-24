@@ -1,4 +1,5 @@
 <script lang="ts">
+	
 	import Hero from './Hero.svelte';
 	import Carousel from '$lib/components/Carousel.svelte';
 

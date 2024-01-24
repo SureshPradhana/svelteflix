@@ -7,6 +7,8 @@
 	import tmdb from '$lib/images/moviedb.svg';
 	import '../styles/styles.css';
 	export let data;
+
+	
 </script>
 
 <svelte:head>
@@ -28,7 +30,7 @@
 	<div class="links">
 		<a href="/search">Search</a>
 
-		{#if data.user}
+		{#if data.locals.user}
 			<a href="/watchlist">Watchlist</a>
 
 			<form method="POST" action="/logout" use:enhance>

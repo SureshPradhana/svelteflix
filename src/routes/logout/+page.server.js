@@ -1,25 +1,16 @@
-import { supabase } from '$lib/server/supabase.js';
+import {db} from '$lib/server/supabase';
 import { redirect } from '@sveltejs/kit';
-import { fail } from '@sveltejs/kit';
-
-export async function load() {
-	throw redirect(307, '/');
-}
 
 export const actions = {
 	async default({ request, cookies }) {
-		const { error } = await supabase.auth.signOut();
-
-		if (error) {
-			return fail(error.status ?? 500, {
-				message: error.message
-			});
+const siginout = db.signOut(cookies.get('supabase.auth.token'));
+cookies.delete('supabase.auth.token', { path: '/' });
+			cookies.delete('supabase.auth.token', { path: '/' });
+		if (siginout) {
+			console.log('logged out')
 		}
 
-		cookies.delete('supabase.auth.token');
-
-		const referer = request.headers.get('referer');
-
-		throw redirect(303, referer ?? '/');
+		
+		throw redirect(303, '/');
 	}
 };

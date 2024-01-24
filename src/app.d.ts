@@ -6,6 +6,17 @@ declare global {
 		// interface Locals {}
 		// interface PageData {}
 		// interface Platform {}
+		interface Locals {
+			supabase: import('@supabase/ssr').createServerClient | null;
+			user:any; 
+			getSession: () => Promise<import('@supabase/supabase-js').Session | null>;
+
+		}
+		interface PageData {
+			infinite?: boolean;
+			title: string;
+		}
+
 	}
 }
 
