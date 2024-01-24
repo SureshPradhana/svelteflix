@@ -1,25 +1,28 @@
-import { Redirect, redirect } from '@sveltejs/kit';
-import { db, users } from '$lib/server/supabase';
+import { redirect } from '@sveltejs/kit';
+import {supabase} from '$lib/server/supabase';
 
 
 export const actions = {
-	login: async ({ request,cookies }) => {
+	login: async (event) => {
+		const  {request,cookies}=event;
 		// TODO log the user in
 		let formData = await request.formData();
 		let email = formData.get('email') || '';
 		let password = formData.get('password') || '';
 
-		let access_token = await db.signIn(email.toString(), password.toString());
-		if (access_token) {
-			cookies.set('supabase.auth.token', access_token, { path: '/' });
-			console.log(access_token)
-			console.log('logged in')
-			console.log(cookies.get('supabase.auth.token'))
+		const { data, error } = await event.locals.supabase.auth.signInWithPassword({ email: email.toString(), password: password.toString() });
+
+		if (data) {
+			cookies.set('supabase.auth.token', data.session?.access_token ?? '', {
+				path: '/'
+			});
 			throw redirect(303, '/');
 		}else{
-			console.log('not logged in')
+			
 			throw redirect(303, '/login');
+
 		}
+		
 
 	}
 	// register: async ({ request }) => {

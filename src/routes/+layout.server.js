@@ -1,9 +1,10 @@
-export const load = async ({ locals }) => {
+
+export function load({ locals }) {
 
 	return {
-		locals: {
-			...locals,
-			user: locals.user || null
+		user: locals.user && {
+            id: locals.user,
+			email: locals.email
 		}
-	}
+	};
 }

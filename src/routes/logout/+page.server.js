@@ -1,16 +1,20 @@
-import {db} from '$lib/server/supabase';
+import { supabase } from '$lib/server/supabase';
 import { redirect } from '@sveltejs/kit';
 
 export const actions = {
-	async default({ request, cookies }) {
-const siginout = db.signOut(cookies.get('supabase.auth.token'));
-cookies.delete('supabase.auth.token', { path: '/' });
-			cookies.delete('supabase.auth.token', { path: '/' });
-		if (siginout) {
-			console.log('logged out')
-		}
+	async default(event) {
+		
+		const { request } = event;
 
 		
+		const { error } = await event.locals.supabase.auth.signOut();
+		if (error) {
+
+			throw redirect(303, '/login')
+		}else{
+			// const {s}=await event.locals.supabase.cookies.remove('supabase.auth.token', {path:'/'})
+			const e=await event.cookies.delete('supabase.auth.token', {path:'/'})
 		throw redirect(303, '/');
+		}
 	}
 };

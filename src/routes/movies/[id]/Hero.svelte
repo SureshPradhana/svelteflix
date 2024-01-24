@@ -7,10 +7,10 @@
 	import { invalidateAll } from '$app/navigation';
 
 	export let movie: MovieDetails;
+
 	export let in_watchlist: boolean;
 
 	let submitting = false;
-	console.log($page.data.locals.user);
 
 	$: backdrop =
 		movie.images.backdrops.find((image) => !image.iso_639_1) || movie.images.backdrops[0];
@@ -30,7 +30,7 @@
 		<Stars vote_average={movie.vote_average} vote_count={movie.vote_count} />
 		<p>{movie.overview}</p>
 
-		{#if $page.data.locals.user}
+		{#if $page.data.user}
 			<form
 				method="POST"
 				action="/watchlist?/{in_watchlist ? 'delete' : 'add'}"
