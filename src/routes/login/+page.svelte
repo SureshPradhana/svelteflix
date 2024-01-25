@@ -1,6 +1,7 @@
 <script>
 	import {enhance} from '$app/forms';
 	export let data;
+	
 </script>
 
 <div class="column">
@@ -18,8 +19,8 @@
 		</label>
 
 		<div class="buttons">
-			<button formaction="?/login" type="submit">login</button>
-			<button formaction="?/register" type="submit">register</button>
+			<button formaction="?/login&redirect_to={data.redirect_to}" type="submit">login</button>
+			<button formaction="?/register&redirect_to={data.redirect_to}" type="submit">register</button>
 		</div>
 	</form>
 </div>

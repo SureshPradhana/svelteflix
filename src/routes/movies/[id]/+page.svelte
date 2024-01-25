@@ -3,9 +3,11 @@
 	import Hero from './Hero.svelte';
 
 	export let data;
+
+	
 </script>
 
-<Hero movie={data.movie} in_watchlist={data.in_watchlist} />
+<Hero movie={data.movie} in_watchedlist={data.in_watchedlist} in_watchlist={data.in_watchlist} />
 
 <div class="column grid" class:has-trailer={!!data.trailer}>
 	{#if data.trailer}

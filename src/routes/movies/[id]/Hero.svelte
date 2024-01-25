@@ -9,6 +9,9 @@
 	export let movie: MovieDetails;
 
 	export let in_watchlist: boolean;
+	export let in_watchedlist: boolean;
+
+
 
 	let submitting = false;
 
@@ -47,6 +50,24 @@
 				<input type="hidden" name="movie_id" value={movie.id} />
 				<button disabled={submitting}>
 					{in_watchlist ? 'Remove this from your watchlist' : 'Add this to your watchlist'}
+				</button>
+			</form>
+			<form
+				method="POST"
+				action="/watchedlist?/{in_watchedlist ? 'delete' : 'add'}"
+				use:enhance={() => {
+					in_watchedlist = !in_watchedlist;
+					submitting = true;
+
+					return async () => {
+						await invalidateAll();
+						submitting = false;
+					};
+				}}
+			>
+				<input type="hidden" name="movie_id" value={movie.id} />
+				<button disabled={submitting}>
+					{in_watchedlist ? 'Remove this from your watchedlist' : 'Add this to your watchedlist'}
 				</button>
 			</form>
 		{:else}

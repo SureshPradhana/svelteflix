@@ -6,8 +6,33 @@
 	import logo from '$lib/images/svelteflix.svg';
 	import tmdb from '$lib/images/moviedb.svg';
 	import '../styles/styles.css';
+	import { successMessage,errorMessage } from '$lib/stores';
+	import {fly} from 'svelte/transition';
 	export let data;
 	$: user = data.user;
+	let messsage;
+	let error=false;
+	let unsubscribe= successMessage.subscribe((value) => {
+
+		if (value) {
+				messsage= value;
+				error=false;
+			setTimeout(() => {
+				successMessage.set(null);
+				messsage= null;
+			}, 60000);
+		}
+	});
+	const unsubscribe2 =errorMessage.subscribe((value) => {
+		if (value) {
+			messsage= value;
+			error=true;
+			setTimeout(() => {
+				errorMessage.set(null);
+				messsage= null;
+			}, 60000);
+		}
+	});
 </script>
 
 <svelte:head>
@@ -23,6 +48,7 @@
 	<meta name="twitter:image" content="https://frontend-masters-svelteflix.vercel.app/og.png" />
 </svelte:head>
 
+
 <nav>
 	<a class="logo" href="/"><img class="logo" alt="SvelteFlix" src={logo} /></a>
 
@@ -31,6 +57,7 @@
 
 		{#if user}
 			<a href="/watchlist">Watchlist</a>
+			<a href="/watchedlist">Watchedlist</a>
 
 			<form method="POST" action="/logout" use:enhance>
 				<button>Log out</button>
@@ -40,7 +67,11 @@
 		{/if}
 	</div>
 </nav>
-
+{#if messsage}
+<div class="{error ? 'error-class' : 'success-class'}" transition:fly={{y:-200,duration:2000}}>
+	<p >{messsage} hello</p>
+</div>	
+{/if}
 <main class:infinite={$page.data.infinite}>
 	<slot />
 </main>
@@ -109,5 +140,30 @@
 
 	.logo {
 		height: 100%;
+	}
+	.error-class, .success-class {
+		position: fixed;
+		top: 0;
+		left: 50%;
+		transform: translateX(-50%);
+		width: auto;
+		height: 1rem;
+		margin: 1rem;
+		padding: 1rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 100;
+		font-size: small;
+		border-radius:5px;
+		color:#2e2e2e;
+		font-weight: bold;
+	}
+	.error-class {
+		background-color: rgb(181, 39, 39);
+		color:rgb(233, 230, 230);
+	}
+	.success-class {
+		background: #08a045;
 	}
 </style>

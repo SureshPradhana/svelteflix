@@ -33,7 +33,7 @@ export const handle: Handle = async ({ event, resolve }) => {
     return session
   }
 
-  const { data, error } = await event.locals.supabase.auth.getUser(event.cookies.get('supabase.auth.token'))
+  const { data} = await event.locals.supabase.auth.getUser(event.cookies.get('supabase.auth.token'))
 
   event.locals.user = data.user?.id
   event.locals.email = data.user?.email
