@@ -13,7 +13,6 @@ export async function load({ data, params, fetch }) {
 			(video.type === 'Trailer' || video.type === 'Teaser')
 		);
 	});
-	console.log(data.in_watchedlist,data.in_watchlist)
 
 	return {
 		in_watchlist: data.in_watchlist,

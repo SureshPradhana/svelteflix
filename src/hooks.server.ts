@@ -37,8 +37,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 
   event.locals.user = data.user?.id
   event.locals.email = data.user?.email
-
-
   return resolve(event, {
     filterSerializedResponseHeaders(name) {
       return name === 'content-range'

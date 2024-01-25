@@ -1,7 +1,8 @@
 import { redirect } from '@sveltejs/kit';
 import { supabase } from '$lib/server/supabase';
 import { fail } from '@sveltejs/kit';
-import { successMessage,errorMessage } from '$lib/stores';
+
+import { status} from '$lib/stores';
 
 
 
@@ -27,13 +28,15 @@ export const actions = {
 
 		const { data, error } = await event.locals.supabase.auth.signInWithPassword({ email: email.toString(), password: password.toString() });
 		if (error) {
-			errorMessage.set('Login failed');
+
+		status.set({ message: 'Login unsuccessful', type: 'error' });
 			throw redirect(303, '/login');
 		}
-		successMessage.set('Login successful');
 		cookies.set('supabase.auth.token', data.session?.access_token ?? '', {
 			path: '/'
 		});
+
+		status.set({ message: 'Login successful', type: 'success' });
 		throw redirect(303, `${url.searchParams.get('redirect_to') ?? '/'}`);
 
 	},
@@ -48,10 +51,12 @@ export const actions = {
 
 		let { data, error } = await supabase.auth.signUp({ email: email.toString(), password: password.toString() })
 		if (error) {
-			errorMessage.set('Registration failed');
+			
+			status.set({ message: 'signup unsuccessful', type: 'error' });
 			throw redirect(303, '/login');
 		}
-		errorMessage.set('Registration successful');
+
+		status.set({ message: 'signup successful', type: 'success' });
 		throw redirect(303, url.searchParams.get('redirect_to') ?? '/');
 	}
 };

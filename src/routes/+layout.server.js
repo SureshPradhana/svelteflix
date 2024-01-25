@@ -1,10 +1,9 @@
 
-export function load({ locals }) {
-
+export function load(events) {
 	return {
-		user: locals.user && {
-            id: locals.user,
-			email: locals.email
+		user: events.locals.user && {
+            id: events.locals.user,
+			email: events.locals.email
 		}
 	};
 }

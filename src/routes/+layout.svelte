@@ -6,32 +6,28 @@
 	import logo from '$lib/images/svelteflix.svg';
 	import tmdb from '$lib/images/moviedb.svg';
 	import '../styles/styles.css';
-	import { successMessage,errorMessage } from '$lib/stores';
+	import {status}  from '$lib/stores';
 	import {fly} from 'svelte/transition';
+	import {onDestroy} from 'svelte';
 	export let data;
 	$: user = data.user;
 	let messsage;
-	let error=false;
-	let unsubscribe= successMessage.subscribe((value) => {
+	let type;
+	let unsubscribe= status.subscribe((value) => {
 
 		if (value) {
-				messsage= value;
-				error=false;
-			setTimeout(() => {
-				successMessage.set(null);
-				messsage= null;
-			}, 60000);
+				messsage= value.message;
+				type=value.type;
+				setTimeout(()=>{
+					status.set({message:null,type:null})
+				},2000)
+			
 		}
 	});
-	const unsubscribe2 =errorMessage.subscribe((value) => {
-		if (value) {
-			messsage= value;
-			error=true;
-			setTimeout(() => {
-				errorMessage.set(null);
-				messsage= null;
-			}, 60000);
-		}
+
+	
+	onDestroy(() => {
+		unsubscribe();
 	});
 </script>
 
@@ -68,8 +64,8 @@
 	</div>
 </nav>
 {#if messsage}
-<div class="{error ? 'error-class' : 'success-class'}" transition:fly={{y:-200,duration:2000}}>
-	<p >{messsage} hello</p>
+<div class:success-class={type==='success'}  class:error-class={type==='error'} transition:fly={{y:-200,duration:2000}}>
+	<p >{messsage}</p>
 </div>	
 {/if}
 <main class:infinite={$page.data.infinite}>
